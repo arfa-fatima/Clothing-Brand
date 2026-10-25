@@ -8,11 +8,12 @@ import { Trash2, ArrowLeft, ShoppingBag } from "lucide-react";
 export default function CartPage() {
   const { cart, addToCart, removeFromCart, clearCart } = useCart();
 
-  const parsePrice = (priceStr: string) => {
-    const numeric = priceStr.replace(/[^0-9]/g, "");
-    return Number(numeric) || 0;
-  };
-
+const parsePrice = (price: any) => {
+  if (typeof price === "number") return price;
+  if (!price) return 0;
+  const numeric = String(price).replace(/[^0-9.]/g, "");
+  return parseFloat(numeric) || 0;
+};
   const subtotal = cart.reduce((total, item) => {
     return total + parsePrice(item.product.price) * item.quantity;
   }, 0);

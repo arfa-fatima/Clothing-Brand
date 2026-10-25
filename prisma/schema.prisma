@@ -25,9 +25,18 @@ model OrderItem {
   id        String @id @default(cuid())
   orderId   String
   order     Order  @relation(fields: [orderId], references: [id], onDelete: Cascade)
-  productId Int
+  productId String
   name      String
   price     Float
   quantity  Int
-  size      String1
+  size      String
+}
+
+model Product{
+  id String @id @default (cuid ())
+  name      String
+  price     Float
+  category  String
+  image     String
+  createdAt DateTime @default(now())
 }

@@ -36,7 +36,7 @@ export async function POST (request:Request){
         status: "PENDING",
         items: {
           create: items.map((item: any) => ({
-            productId: Number(item.productId),
+            productId: String(item.productId || item.id),
             name: item.name,
             price: Number(item.price),
             quantity: Number(item.quantity),

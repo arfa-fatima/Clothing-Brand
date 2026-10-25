@@ -1,5 +1,5 @@
 import CategoriesSection from "@/components/CategorySection/CategorySection";
-import Hero from "../components/Hero/Hero";
+import Hero from "@/components/Hero/Hero";
 import NewArrivals from "@/components/NewArrivals/NewArrivals";
 import FeaturedCollection from "@/components/FeaturedCollection/FeaturedCollection";
 import AboutSection from "@/components/AboutSection/AboutSection";

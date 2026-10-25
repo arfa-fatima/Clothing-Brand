@@ -23,10 +23,12 @@ export default function CheckoutPage() {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [orderPlaced, setOrderPlaced] = useState(false);
 
-  const parsePrice = (priceStr: string) => {
-    const numeric = priceStr.replace(/[^0-9]/g, "");
-    return Number(numeric) || 0;
-  };
+const parsePrice = (price: any) => {
+  if (typeof price === "number") return price;
+  if (!price) return 0;
+  const numeric = String(price).replace(/[^0-9.]/g, "");
+  return parseFloat(numeric) || 0;
+};
 
   const subtotal = cart.reduce(
     (sum, item) => sum + parsePrice(item.product.price) * item.quantity,
@@ -48,8 +50,8 @@ export default function CheckoutPage() {
 
     const orderPayload = {
       customer: formData,
-      items: cart.map((item) => ({
-        productId: item.product.id,
+      items: cart.map((item:any) => ({
+        productId: item.product.id || item.id,
         name: item.product.name,
         price: parsePrice(item.product.price),
         quantity: item.quantity,
@@ -96,20 +98,36 @@ export default function CheckoutPage() {
     );
   }
 
-  if (orderPlaced) {
+if (orderPlaced) {
     return (
-      <main className="min-h-[75vh] flex flex-col items-center justify-center text-center px-4">
-        <CheckCircle2 className="w-16 h-16 text-black mb-4 stroke-[1.5]" />
-        <h1 className="text-3xl font-serif text-neutral-900 mb-2">Order Confirmed!</h1>
+      <div className="min-h-[70vh] bg-white flex flex-col items-center justify-center text-center px-4 py-16">
+        <div className="w-16 h-16 bg-neutral-100 rounded-full flex items-center justify-center mb-6">
+          <span className="text-2xl text-black">✓</span>
+        </div>
+
+        <h1 className="text-3xl font-serif text-neutral-900 mb-2">
+          Order Confirmed!
+        </h1>
+
         <p className="text-sm text-neutral-600 max-w-md mb-8">
-          Thank you for choosing Faah, <span className="font-semibold">{formData.fullName}</span>. 
-          Your order will be delivered to <span className="font-semibold">{formData.city}</span> via Cash on Delivery.
+          Thank you for choosing Faah,{" "}
+          <strong className="text-neutral-900">
+            {formData.fullName || "Customer"}
+          </strong>
+          . Your order will be delivered to{" "}
+          <strong className="text-neutral-900">
+            {formData.city || "your address"}
+          </strong>{" "}
+          via Cash on Delivery.
         </p>
-        <button
-          onClick={() => router.push("/shop")}
-          className="px-8 py-3 bg-black text-white text-xs uppercase tracking-widest font-semibold rounded hover:bg-neutral-800 transition"> Continue Shopping
-        </button>
-      </main>
+
+        <Link
+          href="/shop"
+          className="inline-block bg-black text-white px-8 py-3.5 text-xs uppercase tracking-widest font-medium rounded hover:bg-neutral-800 transition"
+        >
+          Continue Shopping
+        </Link>
+      </div>
     );
   }
 
